@@ -597,7 +597,7 @@ h3 {
     .region-heading {
         position: sticky;
         z-index: 2;
-        top: -1px;
+        top: -24px;
         margin: 0 -4px;
         padding: 8px 4px 12px;
         background: var(--paper);
