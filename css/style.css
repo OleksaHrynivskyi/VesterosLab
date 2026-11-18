@@ -1,0 +1,662 @@
+/* Шрифти */
+@font-face {
+    font-family: "Title";
+    src: local("Cambria");
+    size-adjust: 96%;
+}
+
+@font-face {
+    font-family: "Text";
+    src: local("Cambria");
+}
+
+:root {
+    --sea: #17191c;
+    --dark: #0b0d10;
+    --gold: #d8b452;
+    --silver: #bbc2c9;
+    --paper: #191b1e;
+    --light: #f3ead7;
+    --edge: #4a4031;
+    --text: #e7dfce;
+    --muted: #bdb8ad;
+    --line: #686b70;
+    --focus: #fff3d5;
+}
+
+::before {
+    box-sizing: border-box;
+}
+
+body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    overflow: hidden;
+    background: var(--sea);
+    color: var(--text);
+    font-family: "Text", serif;
+    font-size: 16px;
+}
+
+button {
+    color: inherit;
+    font: inherit;
+}
+
+button:focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 3px;
+}
+
+#sidebar button:focus-visible {
+    outline-color: var(--text);
+}
+
+h1,
+h2,
+h3,
+.land-name,
+.region-words {
+    font-family: "Title", serif;
+}
+
+h2,
+h3 {
+    font-weight: 500;
+}
+
+#main-layout {
+    display: grid;
+    grid-template-columns: 1fr 440px;
+    height: 100dvh;
+}
+
+.is-hidden {
+    display: none !important;
+}
+
+/* Карта */
+
+#map-viewport {
+    position: relative;
+    min-width: 0;
+    overflow: hidden;
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+}
+
+#map-viewport:focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: -4px;
+}
+
+#map-viewport.is-dragging {
+    cursor: grabbing;
+}
+
+.map-wordmark {
+    position: absolute;
+    z-index: 3;
+    top: 24px;
+    left: 32px;
+    right: 32px;
+    pointer-events: none;
+}
+
+#site-title {
+    margin: 0 0 4px;
+    color: var(--gold);
+    font-size: clamp(30px, 3.2vw, 46px);
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    line-height: 0.98;
+}
+
+.map-subtitle {
+    margin: 0;
+    color: var(--silver);
+    font-size: clamp(12px, 1.05vw, 15px);
+    letter-spacing: 0.14em;
+    line-height: 1.35;
+    text-transform: uppercase;
+}
+
+.map-hint {
+    position: absolute;
+    z-index: 3;
+    top: 108px;
+    left: 32px;
+    margin: 0;
+    color: var(--light);
+    font-size: 13px;
+    pointer-events: none;
+}
+
+#map-stage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1758px;
+    height: 2560px;
+    transform-origin: 0 0;
+    will-change: transform;
+}
+
+#map-stage.is-animating {
+    transition: transform 0.2s;
+}
+
+#map-image,
+#map-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#map-svg {
+    overflow: visible;
+}
+
+/* регіони на карті */
+.region-poly {
+    fill: transparent;
+    fill-opacity: 0.18;
+    stroke: transparent;
+    stroke-width: 2;
+    vector-effect: non-scaling-stroke;
+    cursor: pointer;
+    transition: 0.15s;
+}
+
+.region-poly:hover {
+    fill: var(--color);
+    stroke: var(--color);
+}
+
+.region-poly.active {
+    fill: var(--color);
+    fill-opacity: 0.32;
+    stroke: var(--color);
+    stroke-width: 3;
+}
+
+.region-poly:focus-visible {
+    fill: var(--color);
+    fill-opacity: 0.18;
+    stroke: var(--focus);
+    stroke-width: 3;
+    stroke-dasharray: 9 4;
+    outline: none;
+}
+
+.map-controls {
+    position: absolute;
+    z-index: 4;
+    bottom: 24px;
+    left: 24px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px;
+    border: 1px solid var(--line);
+    background: var(--dark);
+    color: var(--light);
+}
+
+.map-controls button {
+    min-width: 44px;
+    height: 44px;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+}
+
+.map-controls button:hover {
+    background: #2a2e32;
+}
+
+.map-control {
+    font-size: 24px;
+    line-height: 1;
+}
+
+.center-control {
+    padding: 0 8px;
+    font-size: 13px;
+}
+
+.zoom-level {
+    min-width: 46px;
+    font-size: 13px;
+    text-align: center;
+}
+
+.region-tooltip {
+    position: absolute;
+    z-index: 5;
+    max-width: 220px;
+    padding: 8px 12px;
+    background: var(--dark);
+    color: var(--light);
+    font-size: 14px;
+    line-height: 1.25;
+    pointer-events: none;
+}
+
+/* Бічна панель */
+
+#sidebar {
+    position: relative;
+    z-index: 2;
+    overflow: auto;
+    padding: clamp(28px, 4vh, 48px) clamp(24px, 3vw, 38px) 32px;
+    background: var(--paper);
+    box-shadow: -5px 0 0 var(--edge), -10px 0 0 var(--dark);
+    scrollbar-color: var(--line) var(--dark);
+    scrollbar-width: thin;
+}
+
+/* рваний край сторінки */
+#sidebar::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 16px;
+    background: var(--dark);
+    clip-path: polygon(100% 0, 100% 100%, 0 100%, 48% 97%, 5% 94%, 63% 91%, 0 88%, 52% 85%, 3% 82%, 62% 79%, 0 76%, 48% 73%, 5% 70%, 65% 67%, 0 64%, 54% 61%, 3% 58%, 62% 55%, 0 52%, 51% 49%, 4% 46%, 64% 43%, 0 40%, 53% 37%, 1% 34%, 65% 31%, 0 28%, 51% 25%, 3% 22%, 62% 19%, 0 16%, 53% 13%, 2% 10%, 64% 7%, 0 4%, 55% 2%);
+}
+
+/* текстура паперу */
+#sidebar::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    opacity: 0.08;
+    background-size: 180px;
+    mix-blend-mode: soft-light;
+    pointer-events: none;
+}
+
+.folio-view {
+    position: relative;
+    z-index: 1;
+}
+
+.folio-kicker {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 8px;
+    color: var(--silver);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* золотий ромбик */
+.folio-kicker::before,
+.land-group-heading::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    flex-shrink: 0;
+    border: 1.5px solid var(--gold);
+    transform: rotate(45deg);
+}
+
+#folio-title {
+    max-width: 11ch;
+    margin: 0;
+    font-size: clamp(30px, 3vw, 38px);
+    line-height: 1.08;
+}
+
+.folio-intro {
+    max-width: 38ch;
+    margin: 12px 0 0;
+    color: var(--muted);
+    line-height: 1.5;
+}
+
+.land-count {
+    margin: 16px 0 8px;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.land-group {
+    margin-top: 24px;
+}
+
+.land-group-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--edge);
+}
+
+.land-group-heading::before {
+    width: 9px;
+    height: 9px;
+    align-self: center;
+}
+
+.land-group-heading h3,
+.characters-section h3 {
+    margin: 0;
+    font-size: 21px;
+}
+
+.land-group-heading span {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.land-list,
+.characters-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 0;
+    list-style: none;
+}
+
+.land-list {
+    gap: 8px 16px;
+    margin: 8px 0 0;
+}
+
+.land-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    min-height: 76px;
+    padding: 8px 0;
+    border: 0;
+    background: transparent;
+    text-align: left;
+    cursor: pointer;
+    transition: transform 0.14s;
+}
+
+.land-link:hover,
+.land-link.active {
+    transform: translateX(3px);
+}
+
+.land-link img {
+    width: 48px;
+    height: 64px;
+    flex-shrink: 0;
+    object-fit: contain;
+}
+
+.land-name {
+    display: block;
+    margin-bottom: 3px;
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 1.08;
+}
+
+.land-ruler {
+    display: block;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.2;
+}
+
+/* ===== Обраний край ===== */
+
+#region-info {
+    padding-bottom: 32px;
+    transition: opacity 0.18s, transform 0.18s;
+}
+
+#region-info.is-entering {
+    opacity: 0;
+    transform: translateY(7px);
+}
+
+.back-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    margin: 0 0 16px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.back-btn:hover {
+    color: var(--text);
+}
+
+.back-btn span {
+    font-size: 21px;
+}
+
+.region-heading {
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    padding: 8px 0 12px;
+}
+
+.region-heading div {
+    flex: 1;
+    min-width: 0;
+}
+
+#region-name {
+    margin: 0;
+    font-size: clamp(36px, 4vw, 52px);
+    line-height: 1.08;
+    overflow-wrap: anywhere;
+}
+
+#region-sigil {
+    width: 150px;
+    height: 160px;
+    object-fit: contain;
+    object-position: bottom;
+}
+
+.region-ruler {
+    margin: 8px 0 0;
+    color: var(--muted);
+    line-height: 1.35;
+}
+
+.region-tincture {
+    width: 86px;
+    height: 7px;
+    margin: 12px 0 24px;
+}
+
+.region-words {
+    margin: 0 0 24px;
+    font-size: clamp(25px, 3vw, 34px);
+    font-style: italic;
+    line-height: 1.2;
+}
+
+.region-description {
+    max-width: 60ch;
+    margin: 0 0 32px;
+    line-height: 1.65;
+}
+
+.characters-section {
+    padding-top: 16px;
+    border-top: 2px solid var(--edge);
+}
+
+.characters-section h3 {
+    margin-bottom: 8px;
+}
+
+.characters-list {
+    gap: 4px 16px;
+    margin: 0;
+}
+
+.characters-list li {
+    padding: 4px 0;
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.35;
+}
+
+/* ===== Адаптивність ===== */
+
+@media (min-width: 761px) and (max-width: 1020px) {
+    #main-layout {
+        grid-template-columns: 1fr minmax(400px, 42vw);
+    }
+
+    #sidebar {
+        padding-right: 24px;
+    }
+
+    .land-list {
+        gap: 4px 12px;
+    }
+}
+
+@media (max-width: 760px) {
+    #main-layout {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #map-viewport {
+        height: 50dvh;
+        min-height: 220px;
+        flex-shrink: 0;
+    }
+
+    .map-wordmark {
+        top: 12px;
+        left: 16px;
+        right: 16px;
+    }
+
+    #site-title {
+        font-size: clamp(28px, 8vw, 36px);
+        letter-spacing: 0.12em;
+    }
+
+    .map-subtitle {
+        font-size: 12px;
+        letter-spacing: 0.1em;
+    }
+
+    .map-hint {
+        top: 94px;
+        left: 16px;
+        right: 16px;
+        font-size: 12px;
+    }
+
+    .map-controls {
+        bottom: 12px;
+        left: 12px;
+    }
+
+    #sidebar {
+        flex: 1;
+        padding: 24px 24px 32px;
+        box-shadow: 0 -5px 0 var(--edge), 0 -10px 0 var(--dark);
+    }
+
+    #sidebar::before {
+        right: 0;
+        bottom: auto;
+        width: 100%;
+        height: 14px;
+        clip-path: polygon(0 100%, 0 44%, 5% 18%, 10% 72%, 16% 22%, 22% 78%, 28% 17%, 35% 72%, 42% 25%, 49% 80%, 56% 18%, 63% 76%, 70% 23%, 77% 80%, 84% 17%, 91% 70%, 96% 22%, 100% 48%, 100% 100%);
+    }
+
+    .region-heading {
+        position: sticky;
+        z-index: 2;
+        top: -1px;
+        margin: 0 -4px;
+        padding: 8px 4px 12px;
+        background: var(--paper);
+    }
+}
+
+@media (max-width: 480px) {
+    #map-viewport {
+        min-height: 200px;
+    }
+
+    #sidebar {
+        padding-right: 16px;
+        padding-left: 16px;
+    }
+
+    #folio-title {
+        font-size: 32px;
+    }
+
+    .land-list,
+    .characters-list {
+        grid-template-columns: 1fr;
+    }
+
+    .land-list {
+        gap: 4px;
+    }
+
+    .land-link {
+        min-height: 68px;
+    }
+
+    #region-sigil {
+        width: 120px;
+        height: 138px;
+    }
+
+    #region-name {
+        font-size: 36px;
+    }
+}
+
+@media (max-width: 360px) {
+    #sidebar {
+        padding-right: 12px;
+        padding-left: 12px;
+    }
+
+    .region-heading {
+        gap: 8px;
+    }
+
+    #region-sigil {
+        width: 72px;
+        height: 90px;
+    }
+
+    #region-name {
+        font-size: 28px;
+    }
+}
