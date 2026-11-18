@@ -192,6 +192,10 @@ h3 {
     stroke: var(--focus);
     stroke-width: 3;
     stroke-dasharray: 9 4;
+}
+
+/* прибираємо квадратну рамку фокусу, яку малює Chrome */
+.region-poly:focus {
     outline: none;
 }
 
